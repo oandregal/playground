@@ -18,12 +18,15 @@ The app has a two-column layout with the chat on the right (1/3 width of viewpor
 
 I'm going to build this step-by-step. The 1st step is to gain a better understanding of building a chat with the LLM that responds to questions and creates code based on the @wordpress/dataviews package context.
 
-I need:
+TODO:
 
-- a basic chat interface: an input with a button to send messages, on top of it a list of the messages.
-- a module to connect to the anthropic Anthropic API: it takes the last message from the chat UI, sends it to the API, and updates the UI with the response.
+- [x] Basic UI interface.
+- [x] Update UI upon user input with mock data.
+- [ ] Real data via anthropic Anthropic API.
 
 ## Execute
+
+### Step 1: bootstrap UI
 
 Create a basic web page with a chat interface: just an input with a button, on top of it a list of the messages.
 
@@ -31,6 +34,44 @@ Create a basic web page with a chat interface: just an input with a button, on t
 - User messages are displayed right-aligned and have a different background color.
 
 Just use the HTML standard elements, do not use any JavaScript or external libraries yet.
+
+## Step 2: update UI upon user input
+
+The next step is to update the list of messages every time the user submits the input.
+
+In the existing `index.js` file, write some JavaScript that maintains a list of messages (chat history) and updates the `div.messages-container` element upon receiving new messages:
+
+```html
+                <div class="messages-container">
+                    <div class="message agent">
+                        Hello! I'm here to help you learn and experiment with
+                        the @wordpress/dataviews package. Feel free to ask me
+                        questions or request code examples.
+                    </div>
+
+                    <div class="message user">
+                        What is the @wordpress/dataviews package?
+                    </div>
+
+                    <div class="message agent">
+                        The @wordpress/dataviews package is a powerful component
+                        library that provides flexible and customizable data
+                        visualization tools. It allows you to display and
+                        interact with data in various formats including tables,
+                        grids, and lists.
+                    </div>
+
+                    <div class="message user">
+                        Can you show me a basic example?
+                    </div>
+
+                    <div class="message agent">
+                        I'd be happy to show you an example! Once the code
+                        editor is integrated, I'll be able to generate and
+                        display working code samples for you to experiment with.
+                    </div>
+                </div>
+```
 
 ## Reflect
 
