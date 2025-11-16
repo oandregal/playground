@@ -16,7 +16,9 @@ The app has a two-column layout with the chat on the right (1/3 width of viewpor
 
 ## Plan
 
-I'm going to build this step-by-step. The 1st step is to gain a better understanding of building a chat with the LLM that responds to questions and creates code based on the @wordpress/dataviews package context.
+I'm going to build this step-by-step.
+
+The 1st step is to gain a better understanding of building a chat with the LLM that responds to questions and creates code based on the @wordpress/dataviews package context.
 
 TODO:
 
@@ -32,75 +34,3 @@ TODO:
   - [ ] Edit any message (user or assistant)
   - [ ] Stream the response https://docs.claude.com/en/api/messages#body-stream
   - [ ] Display tokens.
-
-## Execute
-
-### Step 1: bootstrap UI
-
-Create a basic web page with a chat interface: just an input with a button, on top of it a list of the messages.
-
-- Agent messages are displayed are left-aligned.
-- User messages are displayed right-aligned and have a different background color.
-
-Just use the HTML standard elements, do not use any JavaScript or external libraries yet.
-
-## Step 2: update UI upon user input
-
-The next step is to update the list of messages every time the user submits the input.
-
-In the existing `index.js` file, write some JavaScript that maintains a list of messages (chat history) and updates the `div.messages-container` element upon receiving new messages:
-
-```html
-                <div class="messages-container">
-                    <div class="message agent">
-                        Hello! I'm here to help you learn and experiment with
-                        the @wordpress/dataviews package. Feel free to ask me
-                        questions or request code examples.
-                    </div>
-
-                    <div class="message user">
-                        What is the @wordpress/dataviews package?
-                    </div>
-
-                    <div class="message agent">
-                        The @wordpress/dataviews package is a powerful component
-                        library that provides flexible and customizable data
-                        visualization tools. It allows you to display and
-                        interact with data in various formats including tables,
-                        grids, and lists.
-                    </div>
-
-                    <div class="message user">
-                        Can you show me a basic example?
-                    </div>
-
-                    <div class="message agent">
-                        I'd be happy to show you an example! Once the code
-                        editor is integrated, I'll be able to generate and
-                        display working code samples for you to experiment with.
-                    </div>
-                </div>
-```
-
-### 3. Bootstrap server to handle API requests
-
-I want to start with the minimal step possible. Boostrap a `server.js` file with all existing server-related code.
-
-### 4. Render the page with express
-
-I have a basic express server set up.
-
-### 5. Interact with the Anthropic API.
-
-- [x] Set up /api/chat endpoint.
-- [x] Send request to API.
-- [x] Update message list.
-
-### 6. Update code frame with API response
-
-- [ ] Tell the LLM to divide the response into message and code.
-- [ ] Update the code editor with the code received.
-
-## Reflect
-
-Ignore for now. To do at a later stage.

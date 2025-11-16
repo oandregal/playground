@@ -10,7 +10,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.static("."));
 
 const SYSTEM_PROMPT = `
-- You are an assistant that helps users write and understand code using the @wordpress/packages library.
+- You are an assistant that helps users write and understand HTML, CSS, and JavaScript code.
 - If you don't know the answer, say "I don't know".
 - Explain concepts clearly and concisely, and provide code examples.
 - Do not get ahead of yourself, always go step-by-step.
@@ -30,8 +30,7 @@ const tools = [
         },
         language: {
           type: "string",
-          description:
-            "Programming language (e.g., 'javascript', 'html', 'css', 'jsx')",
+          description: "Programming language: one of 'html', 'css', 'js'.",
         },
       },
       required: ["code", "language"],
