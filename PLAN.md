@@ -25,6 +25,7 @@ TODO:
 - [x] Real data via anthropic Anthropic API.
 - [ ] Display code sent by the LLM.
 - [ ] Tools: let the LLM use a read_example tool (or similar).
+- [ ] Code-editor flow: ask before updating? Update editor vs. inline.
 - [ ] Later
   - [ ] ESC: to cancel current request
   - [ ] Shift+Enter: to write in new line (increases input's height)

@@ -16,6 +16,29 @@ const SYSTEM_PROMPT = `
 - Do not get ahead of yourself, always go step-by-step.
 `;
 
+const tools = [
+  {
+    name: "display_code",
+    description:
+      "Display code in the editor/preview area. Use this whenever you want to show code examples that the user should see rendered in the editor. This is perfect for demonstrating examples or showing code that users can experiment with.",
+    input_schema: {
+      type: "object",
+      properties: {
+        code: {
+          type: "string",
+          description: "The complete code to display in the editor",
+        },
+        language: {
+          type: "string",
+          description:
+            "Programming language (e.g., 'javascript', 'html', 'css', 'jsx')",
+        },
+      },
+      required: ["code", "language"],
+    },
+  },
+];
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -28,12 +51,28 @@ app.post("/api/chat", async (req, res) => {
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages,
+      tools,
     });
 
     console.log("✅ API call successful!");
-    console.log("Response:", msg);
+    console.log(msg);
 
-    res.json(msg);
+    const response = {
+      message: "",
+      code: null,
+      language: null,
+    };
+
+    msg.content.forEach((block) => {
+      if (block.type === "text") {
+        response.message += block.text;
+      } else if (block.type === "tool_use" && block.name === "display_code") {
+        response.code = block.input.code;
+        response.language = block.input.language;
+      }
+    });
+
+    res.json(response);
   } catch (error) {
     console.error("❌ API call failed:", error);
 

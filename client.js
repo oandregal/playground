@@ -9,6 +9,7 @@ const messages = [
 const messagesContainer = document.querySelector(".messages-container");
 const inputField = document.querySelector(".input-container input");
 const sendButton = document.querySelector(".input-container button");
+const editorPreviewArea = document.querySelector(".editor-preview-area");
 
 function createMessageElement(message) {
   const messageDiv = document.createElement("div");
@@ -46,6 +47,24 @@ function addMessage(message) {
   renderMessages();
 }
 
+// Tool: display code in editor
+function updateCode(code, language) {
+  editorPreviewArea.innerHTML = `
+    <div class="code-display">
+      <div class="code-header">
+        <span class="code-language">${language}</span>
+      </div>
+      <pre><code>${escapeHtml(code)}</code></pre>
+    </div>
+  `;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 function handleSubmit() {
   const content = inputField.value.trim();
 
@@ -71,8 +90,12 @@ function handleSubmit() {
 
         addMessage({
           role: "assistant",
-          content: data.content[0].text,
+          content: data.message,
         });
+
+        if (data.code && data.language) {
+          updateCode(data.code, data.language);
+        }
       })
       .catch((error) => {
         waitingIndicator.remove();
