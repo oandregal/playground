@@ -1,4 +1,5 @@
 import express from "express";
+import Anthropic from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
 
 // Load environment variables from .env.local
@@ -7,21 +8,30 @@ dotenv.config({ path: ".env.local" });
 const app = express();
 app.use(express.static("."));
 
+const anthropic = new Anthropic();
 app.get("/api/chat", async (req, res) => {
   try {
-    console.log("✅ API call successful!");
-
-    res.json({
-      success: true,
-      message: "okay",
-      usage: "usage",
+    const msg = await anthropic.messages.create({
+      model: "claude-sonnet-4-5",
+      max_tokens: 1024,
+      messages: [
+        {
+          role: "user",
+          content: "what's the weather like in Vigo?",
+        },
+      ],
     });
+
+    console.log("✅ API call successful!");
+    console.log("Response:", msg);
+
+    res.json(msg);
   } catch (error) {
     console.error("❌ API call failed:", error);
 
     res.status(500).json({
       success: false,
-      error: "error.message",
+      error,
     });
   }
 });

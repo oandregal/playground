@@ -84,7 +84,7 @@ I have a basic express server set up.
 ### 5. Interact with the Anthropic API.
 
 - [x] Set up /api/chat endpoint.
-- [ ] Send request to API.
+- [x] Send request to API.
 - [ ] Update message list.
 
 ## Reflect
