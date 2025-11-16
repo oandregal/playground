@@ -47,13 +47,21 @@ function handleSubmit() {
 
     inputField.value = "";
 
-    setTimeout(() => {
-      addMessage({
-        role: "agent",
-        content:
-          "This is a placeholder response. The AI integration will be implemented in the next steps.",
+    fetch("/api/chat")
+      .then((response) => response.json())
+      .then((data) => {
+        addMessage({
+          role: "agent",
+          content: data.content[0].text,
+        });
+      })
+      .catch((error) => {
+        console.error("Error calling API:", error);
+        addMessage({
+          role: "agent",
+          content: "Sorry, there was an error getting a response.",
+        });
       });
-    }, 500);
   }
 }
 
