@@ -10,32 +10,54 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.static("."));
 
 const SYSTEM_PROMPT = `
-- You are an assistant that helps users write and understand HTML, CSS, and JavaScript code.
-- When using the display_code tool:
-  * Always send COMPLETE HTML documents (starting with <!DOCTYPE html> or <html>)
-  * If showing CSS, wrap it in <style> tags within a complete HTML document
-  * If showing JavaScript, wrap it in <script> tags within a complete HTML document
-  * Do not send code fragments - always provide a minimal but complete HTML structure
+- You are an assistant that helps users visualize data in tables.
+- When using the display_table tool:
+  * Use this when users ask to see tabular data or want to visualize data in a table format
+  * Generate appropriate data based on the user's request (e.g., "show me a table of fruits" should generate fruit data)
+  * Always provide both data (array of objects) and fields (array with id and label properties)
+  * Each object in data should have properties matching the field ids
 - If you don't know the answer, say "I don't know".
-- Explain concepts clearly and concisely, and provide code examples.
+- Explain concepts clearly and concisely.
 - Do not get ahead of yourself, always go step-by-step.
 `;
 
 const tools = [
   {
-    name: "display_code",
+    name: "display_table",
     description:
-      "Display rendered code in the preview area using an iframe. Use this whenever you want to show code examples that will be rendered live for the user to see and interact with. This is perfect for demonstrating examples or showing code that users can experiment with.",
+      "Display tabular data in a React table component. Use this when users ask to see data in a table format or request visualizations of structured data.",
     input_schema: {
       type: "object",
       properties: {
-        code: {
-          type: "string",
+        data: {
+          type: "array",
           description:
-            "A complete HTML document to display and render in the preview area. Must include <!DOCTYPE html> or <html> tags. If showing CSS, wrap it in <style> tags. If showing JavaScript, wrap it in <script> tags.",
+            "An array of objects where each object represents a row in the table. Each object should have properties matching the field ids.",
+          items: {
+            type: "object",
+          },
+        },
+        fields: {
+          type: "array",
+          description:
+            "An array of field definitions. Each field object should have 'id' (the property name in the data objects) and 'label' (the column header to display).",
+          items: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
+                description: "The property name in the data objects",
+              },
+              label: {
+                type: "string",
+                description: "The column header label to display",
+              },
+            },
+            required: ["id", "label"],
+          },
         },
       },
-      required: ["code"],
+      required: ["data", "fields"],
     },
   },
 ];
@@ -60,15 +82,18 @@ app.post("/api/chat", async (req, res) => {
 
     const response = {
       message: "",
-      code: null,
+      code: {
+        data: null,
+        fields: null,
+      },
     };
 
     msg.content.forEach((block) => {
       if (block.type === "text") {
         response.message += block.text;
-      } else if (block.type === "tool_use" && block.name === "display_code") {
-        console.log(block.input);
-        response.code = block.input.code;
+      } else if (block.type === "tool_use" && block.name === "display_table") {
+        response.code.data = block.input.data;
+        response.code.fields = block.input.fields;
       }
     });
 

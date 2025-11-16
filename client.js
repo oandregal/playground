@@ -47,28 +47,49 @@ function addMessage(message) {
   renderMessages();
 }
 
-// Tool: display code in editor
-function updateCode(code) {
-  // Create iframe element
-  const iframe = document.createElement("iframe");
-  iframe.className = "render-iframe";
-  iframe.sandbox = "allow-scripts";
+function Table({ data, fields }) {
+  if (!data || data.length === 0) {
+    return React.createElement(
+      "div",
+      { className: "empty-state" },
+      "No data to display",
+    );
+  }
 
-  // Error handling
-  iframe.onerror = () => {
-    editorPreviewArea.innerHTML = `
-      <div style="padding: 20px; text-align: center; color: #999;">
-        <p>Error rendering code</p>
-      </div>
-    `;
-  };
+  return React.createElement(
+    "table",
+    { className: "data-table" },
+    React.createElement(
+      "thead",
+      null,
+      React.createElement(
+        "tr",
+        null,
+        fields.map((field) =>
+          React.createElement("th", { key: field.id }, field.label),
+        ),
+      ),
+    ),
+    React.createElement(
+      "tbody",
+      null,
+      data.map((row, index) =>
+        React.createElement(
+          "tr",
+          { key: index },
+          fields.map((field) =>
+            React.createElement("td", { key: field.id }, row[field.id]),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
-  // Set iframe content
-  iframe.srcdoc = code;
-
-  // Clear container and append iframe
-  editorPreviewArea.innerHTML = "";
-  editorPreviewArea.appendChild(iframe);
+// Tool: display table in preview area
+function updateComponent({ data, fields }) {
+  const root = ReactDOM.createRoot(document.getElementById("react-root"));
+  root.render(React.createElement(Table, { data, fields }));
 }
 
 function handleSubmit() {
@@ -99,9 +120,7 @@ function handleSubmit() {
           content: data.message,
         });
 
-        if (data.code) {
-          updateCode(data.code);
-        }
+        updateComponent(data.code);
       })
       .catch((error) => {
         waitingIndicator.remove();
