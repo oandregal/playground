@@ -81,6 +81,12 @@ I want to start with the minimal step possible. Boostrap a `server.js` file with
 
 I have a basic express server set up.
 
+### 5. Interact with the Anthropic API.
+
+- [x] Set up /api/chat endpoint.
+- [ ] Send request to API.
+- [ ] Update message list.
+
 ## Reflect
 
 Ignore for now. To do at a later stage.
