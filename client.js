@@ -17,6 +17,13 @@ function createMessageElement(message) {
   return messageDiv;
 }
 
+function createWaitingIndicator() {
+  const waitingDiv = document.createElement("div");
+  waitingDiv.className = "message assistant waiting";
+  waitingDiv.innerHTML = "<span>•</span><span>•</span><span>•</span>";
+  return waitingDiv;
+}
+
 function renderMessages() {
   messagesContainer.innerHTML = "";
 
@@ -47,6 +54,10 @@ function handleSubmit() {
 
     inputField.value = "";
 
+    const waitingIndicator = createWaitingIndicator();
+    messagesContainer.appendChild(waitingIndicator);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
     fetch("/api/chat", {
       method: "POST",
       headers: {
@@ -56,12 +67,16 @@ function handleSubmit() {
     })
       .then((response) => response.json())
       .then((data) => {
+        waitingIndicator.remove();
+
         addMessage({
           role: "assistant",
           content: data.content[0].text,
         });
       })
       .catch((error) => {
+        waitingIndicator.remove();
+
         console.error("Error calling API:", error);
         addMessage({
           role: "assistant",
