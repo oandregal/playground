@@ -13,7 +13,7 @@ const sendButton = document.querySelector(".input-container button");
 function createMessageElement(message) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `message ${message.role}`;
-  messageDiv.textContent = message.content;
+  messageDiv.innerHTML = marked.parse(message.content);
   return messageDiv;
 }
 

@@ -160,7 +160,97 @@
                     transform: translateY(-8px);
                 }
             }
+
+            /* Markdown styling */
+            .message code {
+                background-color: rgba(0, 0, 0, 0.1);
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+                    Consolas, "Courier New", monospace;
+                font-size: 13px;
+            }
+
+            .message.user code {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+
+            .message pre {
+                background-color: rgba(0, 0, 0, 0.1);
+                padding: 12px;
+                border-radius: 8px;
+                overflow-x: auto;
+                margin: 8px 0;
+            }
+
+            .message.user pre {
+                background-color: rgba(255, 255, 255, 0.15);
+            }
+
+            .message pre code {
+                background: none;
+                padding: 0;
+            }
+
+            .message ul,
+            .message ol {
+                margin: 8px 0;
+                padding-left: 24px;
+            }
+
+            .message li {
+                margin: 4px 0;
+            }
+
+            .message p {
+                margin: 4px 0;
+            }
+
+            .message p:first-child {
+                margin-top: 0;
+            }
+
+            .message p:last-child {
+                margin-bottom: 0;
+            }
+
+            .message h1,
+            .message h2,
+            .message h3,
+            .message h4,
+            .message h5,
+            .message h6 {
+                margin: 12px 0 8px 0;
+                font-weight: 600;
+            }
+
+            .message h1:first-child,
+            .message h2:first-child,
+            .message h3:first-child {
+                margin-top: 0;
+            }
+
+            .message a {
+                color: inherit;
+                text-decoration: underline;
+            }
+
+            .message blockquote {
+                border-left: 3px solid rgba(0, 0, 0, 0.2);
+                padding-left: 12px;
+                margin: 8px 0;
+                opacity: 0.8;
+            }
+
+            .message.user blockquote {
+                border-left-color: rgba(255, 255, 255, 0.5);
+            }
+
+            .message strong {
+                font-weight: 600;
+            }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script src="client.js" defer></script>
     </head>
     <body>
