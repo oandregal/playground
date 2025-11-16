@@ -6,20 +6,18 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
 const app = express();
+app.use(express.json()); // Parse JSON request bodies
 app.use(express.static("."));
 
 const anthropic = new Anthropic();
-app.get("/api/chat", async (req, res) => {
+app.post("/api/chat", async (req, res) => {
   try {
+    const { messages } = req.body;
+
     const msg = await anthropic.messages.create({
       model: "claude-sonnet-4-5",
       max_tokens: 1024,
-      messages: [
-        {
-          role: "user",
-          content: "what's the weather like in Vigo?",
-        },
-      ],
+      messages,
     });
 
     console.log("✅ API call successful!");

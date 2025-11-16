@@ -1,6 +1,6 @@
-const chatHistory = [
+const messages = [
   {
-    role: "agent",
+    role: "assistant",
     content:
       "Hello! I'm here to help you learn and experiment with the @wordpress/dataviews package. Feel free to ask me questions or request code examples.",
   },
@@ -20,7 +20,7 @@ function createMessageElement(message) {
 function renderMessages() {
   messagesContainer.innerHTML = "";
 
-  chatHistory.forEach((message) => {
+  messages.forEach((message) => {
     const messageElement = createMessageElement(message);
     messagesContainer.appendChild(messageElement);
   });
@@ -34,7 +34,7 @@ function addMessage(message) {
     return;
   }
 
-  chatHistory.push(message);
+  messages.push(message);
 
   renderMessages();
 }
@@ -47,18 +47,24 @@ function handleSubmit() {
 
     inputField.value = "";
 
-    fetch("/api/chat")
+    fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ messages }),
+    })
       .then((response) => response.json())
       .then((data) => {
         addMessage({
-          role: "agent",
+          role: "assistant",
           content: data.content[0].text,
         });
       })
       .catch((error) => {
         console.error("Error calling API:", error);
         addMessage({
-          role: "agent",
+          role: "assistant",
           content: "Sorry, there was an error getting a response.",
         });
       });
