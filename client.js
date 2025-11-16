@@ -48,21 +48,27 @@ function addMessage(message) {
 }
 
 // Tool: display code in editor
-function updateCode(code, language) {
-  editorPreviewArea.innerHTML = `
-    <div class="code-display">
-      <div class="code-header">
-        <span class="code-language">${language}</span>
-      </div>
-      <pre><code>${escapeHtml(code)}</code></pre>
-    </div>
-  `;
-}
+function updateCode(code) {
+  // Create iframe element
+  const iframe = document.createElement("iframe");
+  iframe.className = "render-iframe";
+  iframe.sandbox = "allow-scripts";
 
-function escapeHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+  // Error handling
+  iframe.onerror = () => {
+    editorPreviewArea.innerHTML = `
+      <div style="padding: 20px; text-align: center; color: #999;">
+        <p>Error rendering code</p>
+      </div>
+    `;
+  };
+
+  // Set iframe content
+  iframe.srcdoc = code;
+
+  // Clear container and append iframe
+  editorPreviewArea.innerHTML = "";
+  editorPreviewArea.appendChild(iframe);
 }
 
 function handleSubmit() {
@@ -93,8 +99,8 @@ function handleSubmit() {
           content: data.message,
         });
 
-        if (data.code && data.language) {
-          updateCode(data.code, data.language);
+        if (data.code) {
+          updateCode(data.code);
         }
       })
       .catch((error) => {

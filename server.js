@@ -11,6 +11,11 @@ app.use(express.static("."));
 
 const SYSTEM_PROMPT = `
 - You are an assistant that helps users write and understand HTML, CSS, and JavaScript code.
+- When using the display_code tool:
+  * Always send COMPLETE HTML documents (starting with <!DOCTYPE html> or <html>)
+  * If showing CSS, wrap it in <style> tags within a complete HTML document
+  * If showing JavaScript, wrap it in <script> tags within a complete HTML document
+  * Do not send code fragments - always provide a minimal but complete HTML structure
 - If you don't know the answer, say "I don't know".
 - Explain concepts clearly and concisely, and provide code examples.
 - Do not get ahead of yourself, always go step-by-step.
@@ -20,20 +25,17 @@ const tools = [
   {
     name: "display_code",
     description:
-      "Display code in the editor/preview area. Use this whenever you want to show code examples that the user should see rendered in the editor. This is perfect for demonstrating examples or showing code that users can experiment with.",
+      "Display rendered code in the preview area using an iframe. Use this whenever you want to show code examples that will be rendered live for the user to see and interact with. This is perfect for demonstrating examples or showing code that users can experiment with.",
     input_schema: {
       type: "object",
       properties: {
         code: {
           type: "string",
-          description: "The complete code to display in the editor",
-        },
-        language: {
-          type: "string",
-          description: "Programming language: one of 'html', 'css', 'js'.",
+          description:
+            "A complete HTML document to display and render in the preview area. Must include <!DOCTYPE html> or <html> tags. If showing CSS, wrap it in <style> tags. If showing JavaScript, wrap it in <script> tags.",
         },
       },
-      required: ["code", "language"],
+      required: ["code"],
     },
   },
 ];
@@ -59,15 +61,14 @@ app.post("/api/chat", async (req, res) => {
     const response = {
       message: "",
       code: null,
-      language: null,
     };
 
     msg.content.forEach((block) => {
       if (block.type === "text") {
         response.message += block.text;
       } else if (block.type === "tool_use" && block.name === "display_code") {
+        console.log(block.input);
         response.code = block.input.code;
-        response.language = block.input.language;
       }
     });
 
