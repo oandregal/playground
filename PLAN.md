@@ -73,6 +73,14 @@ In the existing `index.js` file, write some JavaScript that maintains a list of 
                 </div>
 ```
 
+### 3. Bootstrap server to handle API requests
+
+I want to start with the minimal step possible. Boostrap a `server.js` file with all existing server-related code.
+
+### 4. Render the page with express
+
+I have a basic express server set up.
+
 ## Reflect
 
 Ignore for now. To do at a later stage.

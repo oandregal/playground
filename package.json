@@ -1,0 +1,20 @@
+{
+  "name": "dataviews-playground",
+  "version": "0.0.1",
+  "description": "A playground for the @wordpress/dataviews package with AI chat integration.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "dataviews",
+    "wordpress",
+    "playground"
+  ],
+  "author": "",
+  "license": "GPL-2.0-or-later",
+  "dependencies": {
+    "express": "5.1.0"
+  }
+}
