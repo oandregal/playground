@@ -22,7 +22,15 @@ TODO:
 
 - [x] Basic UI interface.
 - [x] Update UI upon user input with mock data.
-- [ ] Real data via anthropic Anthropic API.
+- [x] Real data via anthropic Anthropic API.
+- [ ] Display code sent by the LLM.
+- [ ] Tools: let the LLM use a read_example tool (or similar).
+- [ ] Later
+  - [ ] ESC: to cancel current request
+  - [ ] Shift+Enter: to write in new line (increases input's height)
+  - [ ] Edit any message (user or assistant)
+  - [ ] Stream the response https://docs.claude.com/en/api/messages#body-stream
+  - [ ] Display tokens.
 
 ## Execute
 
@@ -85,7 +93,12 @@ I have a basic express server set up.
 
 - [x] Set up /api/chat endpoint.
 - [x] Send request to API.
-- [ ] Update message list.
+- [x] Update message list.
+
+### 6. Update code frame with API response
+
+- [ ] Tell the LLM to divide the response into message and code.
+- [ ] Update the code editor with the code received.
 
 ## Reflect
 
