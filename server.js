@@ -2,7 +2,7 @@ import express from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
 
-// Load environment variables from .env.local
+// Load environment variables from .env.local into process.env
 dotenv.config({ path: ".env.local" });
 
 const app = express();
@@ -10,13 +10,15 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.static("."));
 
 const SYSTEM_PROMPT = `
-You are an assistant that helps users write and understand code using the @wordpress/packages library.
-If you don't know the answer, say "I don't know".
-Explain concepts clearly and concisely, and provide code examples.
-Do not get ahead of yourself, always go step-by-step.
+- You are an assistant that helps users write and understand code using the @wordpress/packages library.
+- If you don't know the answer, say "I don't know".
+- Explain concepts clearly and concisely, and provide code examples.
+- Do not get ahead of yourself, always go step-by-step.
 `;
 
-const anthropic = new Anthropic();
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 app.post("/api/chat", async (req, res) => {
   try {
     const { messages } = req.body;
