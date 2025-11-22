@@ -23,14 +23,8 @@ Users can interact with an LLM (Large Language Model) in a chat to ask questions
 
 TODO:
 
-- [x] Basic UI interface.
-- [x] Update UI upon user input with mock data.
-- [x] Real data via anthropic Anthropic API.
-- [x] Render code sent by the LLM.
-- [x] Tools: let the LLM use a read_example tool (or similar).
-
-Later
-
+- [ ] Scroll to last message.
+- [ ] Remove double messages-container div.
 - [ ] ESC: to cancel current request
 - [ ] Shift+Enter: to write in new line (increases input's height)
 - [ ] Edit any message (user or assistant)

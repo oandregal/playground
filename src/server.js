@@ -1,18 +1,19 @@
 import express from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
+import displayTableDefinition from "./tools/display-table.js";
 
 // Load environment variables from .env.local into process.env
 dotenv.config({ path: ".env.local" });
 
 const app = express();
 app.use(express.json()); // Parse JSON request bodies
-app.use(express.static("."));
+app.use(express.static("public"));
 
 const SYSTEM_PROMPT = `
 - You are an assistant that helps users visualize data in tables.
-- When using the display_table tool:
-  * Use this when users ask to see tabular data or want to visualize data in a table format
+- You have a display-table tool available:
+  * You must Use it when users ask to see tabular data or want to visualize data in a table format
   * Generate appropriate data based on the user's request (e.g., "show me a table of fruits" should generate fruit data)
   * Always provide both data (array of objects) and fields (array with id and label properties)
   * Each object in data should have properties matching the field ids
@@ -21,46 +22,7 @@ const SYSTEM_PROMPT = `
 - Do not get ahead of yourself, always go step-by-step.
 `;
 
-const tools = [
-  {
-    name: "display_table",
-    description:
-      "Display tabular data in a React table component. Use this when users ask to see data in a table format or request visualizations of structured data.",
-    input_schema: {
-      type: "object",
-      properties: {
-        data: {
-          type: "array",
-          description:
-            "An array of objects where each object represents a row in the table. Each object should have properties matching the field ids.",
-          items: {
-            type: "object",
-          },
-        },
-        fields: {
-          type: "array",
-          description:
-            "An array of field definitions. Each field object should have 'id' (the property name in the data objects) and 'label' (the column header to display).",
-          items: {
-            type: "object",
-            properties: {
-              id: {
-                type: "string",
-                description: "The property name in the data objects",
-              },
-              label: {
-                type: "string",
-                description: "The column header label to display",
-              },
-            },
-            required: ["id", "label"],
-          },
-        },
-      },
-      required: ["data", "fields"],
-    },
-  },
-];
+const tools = [displayTableDefinition];
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -91,7 +53,7 @@ app.post("/api/chat", async (req, res) => {
     msg.content.forEach((block) => {
       if (block.type === "text") {
         response.message += block.text;
-      } else if (block.type === "tool_use" && block.name === "display_table") {
+      } else if (block.type === "tool_use" && block.name === "display-table") {
         response.code.data = block.input.data;
         response.code.fields = block.input.fields;
       }

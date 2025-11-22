@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Playground</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script type="importmap">
+            {
+                "imports": {
+                    "react": "https://esm.sh/react@18",
+                    "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+                    "react-dom": "https://esm.sh/react-dom@18",
+                    "react-dom/client": "https://esm.sh/react-dom@18/client",
+                    "react-markdown": "https://esm.sh/react-markdown@10?bundle&external=react"
+                }
+            }
+        </script>
+        <script type="module" src="app.js" defer></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="preview-area">
+                <div id="preview-container">
+                    <div class="empty-state">Nothing to display</div>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <div class="messages-area">
+                    <div class="message assistant">
+                        <p>
+                            Hello! I'm here to help you learn and experiment
+                            with HTML, CSS, and JavaScript. Feel free to ask me
+                            questions or request code examples.
+                        </p>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <div class="input-container">
+                        <input
+                            type="text"
+                            placeholder="Ask a question or request code..."
+                        />
+                        <button>Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
