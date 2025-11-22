@@ -37,12 +37,6 @@ body {
     background-color: #ffffff;
 }
 
-.chat-header {
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
-    background-color: #fafafa;
-}
-
 .messages-area {
     flex: 1;
     overflow-y: auto;
@@ -126,7 +120,7 @@ body {
 }
 
 .message.assistant.waiting span {
-    font-size: 14px;
+    font-size: 6px;
     line-height: 1;
     animation: jump 1.4s infinite;
 }
