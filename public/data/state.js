@@ -7,12 +7,7 @@ const messages = [
 ];
 
 export function addMessage(message) {
-  if (!message.content.trim()) {
-    return messages;
-  }
-
   messages.push(message);
-
   return messages;
 }
 

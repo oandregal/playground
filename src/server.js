@@ -13,10 +13,12 @@ app.use(express.static("public"));
 const SYSTEM_PROMPT = `
 - You are an assistant that helps users visualize data in tables.
 - You have a display-table tool available:
-  * You must Use it when users ask to see tabular data or want to visualize data in a table format
-  * Generate appropriate data based on the user's request (e.g., "show me a table of fruits" should generate fruit data)
-  * Always provide both data (array of objects) and fields (array with id and label properties)
-  * Each object in data should have properties matching the field ids
+  * You must use this tool when users ask to see tabular data or want to visualize data in a table format.
+  * Generate appropriate data based on the user's request (e.g., "show me a table of fruits" should generate fruit data).
+  * Always provide both data (array of objects) and fields (array with id and label properties).
+  * Each object in data must have properties matching the field ids.
+  * Each object in data must have an unique "id" property.
+  * Update the existing data and fields according to the user input, rather than generating new ones from scratch every time.
 - If you don't know the answer, say "I don't know".
 - Explain concepts clearly and concisely.
 - Do not get ahead of yourself, always go step-by-step.
@@ -42,24 +44,7 @@ app.post("/api/chat", async (req, res) => {
     console.log("✅ API call successful!");
     console.log(msg);
 
-    const response = {
-      message: "",
-      code: {
-        data: null,
-        fields: null,
-      },
-    };
-
-    msg.content.forEach((block) => {
-      if (block.type === "text") {
-        response.message += block.text;
-      } else if (block.type === "tool_use" && block.name === "display-table") {
-        response.code.data = block.input.data;
-        response.code.fields = block.input.fields;
-      }
-    });
-
-    res.json(response);
+    res.json(msg);
   } catch (error) {
     console.error("❌ API call failed:", error);
 

@@ -34,21 +34,42 @@ function handleSubmit() {
     renderMessages(msgs);
 
     sendMessages(msgs)
-      .then((data) => {
-        const msgs = addMessage({
-          role: "assistant",
-          content: data.message,
+      .then((response) => {
+        let data;
+        let fields;
+        let msg = "";
+        response.content.forEach((block) => {
+          if (block.type === "text") {
+            msg += block.text;
+          } else if (
+            block.type === "tool_use" &&
+            block.name === "display-table"
+          ) {
+            data = block.input.data;
+            fields = block.input.fields;
+          }
         });
-        renderMessages(msgs);
-        renderPreview(data.code);
+
+        if (!msg.trim() && (!data || !fields)) {
+          msg = "Updated the preview.";
+        }
+
+        renderMessages(
+          addMessage({
+            role: "assistant",
+            content: msg,
+          }),
+        );
+        renderPreview({ data, fields });
       })
       .catch((error) => {
         console.error("Error calling API:", error);
-        const msgs = addMessage({
-          role: "assistant",
-          content: "Sorry, there was an error getting a response.",
-        });
-        renderMessages(msgs);
+        renderMessages(
+          addMessage({
+            role: "assistant",
+            content: "Sorry, there was an error getting a response.",
+          }),
+        );
       });
   }
 }
